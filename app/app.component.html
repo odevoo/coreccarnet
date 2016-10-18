@@ -1,0 +1,41 @@
+<h1>Hello {{firstname}}</h1>
+<p>{{friends.length}} contacts dans la liste</p>
+
+
+<add-contact-form [myFriends]="friends"></add-contact-form>
+<hr>
+<div class='col6'>
+
+<input placeholder="Rechercher par prénom" type="text" [(ngModel)]="word" />
+<p>Votre recherche : {{word}}</p>
+
+<label>Trier</label>
+<select [(ngModel)]="param">
+  <option value='firstname'>par ordre alphabétique</option>
+  <option value='timestamp'>Par date</option>
+</select>
+
+<div *ngFor="let friend of friends | search:word | orderBy:param " class="contacts" [class.myReq]="friend.myRequest" >
+<button (click)="deleteFriendRequest(friend)">X</button>
+<img *ngIf="friend.image" [src]="friend.image" />
+<img *ngIf="!friend.image" src="https://cdn4.iconfinder.com/data/icons/angular-emotion/30/emotion-surprised-face-emoji-avatar-bored-1-128.png" />
+<span (click)="showDetails(friend)">{{friend.firstname | uppercase}}</span>
+</div>
+</div>
+
+<div class='col6 details'>
+<div *ngIf="details">
+  <h3>Détails</h3>
+  <h4 *ngIf="details.myRequest">VIP</h4>
+  <p>Contact ajouté le {{details.timestamp * 1000 | date:'d/MM/y'}}</p>
+  <ul>
+    <li>Prénom : {{details.firstname | lowercase}}</li>
+    <li>Téléphone : {{details.phone}}</li>
+    <li>Adresse : {{details.address}} {{details.cp}}</li>
+  </ul>
+  <button (click)="hideDetails()">Cacher les détails</button>
+</div>
+<div *ngIf="!details">
+  <p>Cliquez sur un nom pour afficher les détails</p>
+</div>
+</div>
